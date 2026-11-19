@@ -234,43 +234,6 @@ main {
   box-shadow: 1px 8px 24px rgb(0, 0, 0, 0.5);
 }
 
-/* Skeleton Loading */
-.movie-card--skeleton {
-  background: #e0e0e0;
-  width: 100%;
-  margin: 0 auto;
-  border-radius: 12px;
-}
-
-.movie-card__img--skeleton {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-.movie-card__title--skeleton {
-  height: 20px;
-  background: #e0e0e0;
-  margin: 10px 0 5px 0;
-  width: 80%;
-}
-
-.movie-card__year--skeleton {
-  height: 16px;
-  background: #e0e0e0;
-  width: 40%;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
 
 footer {
   background: #333;
