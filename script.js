@@ -4,10 +4,24 @@ const API_KEY = 'f96876c6';
 const form = document.querySelector('#searchForm');
 const input = document.querySelector('#searchInput');
 const grid = document.querySelector('#moviesGrid');
-const resultsInfo = document.querySelector('#resultInfo');
-const sort = document.querySelector('#sortSelect')
+const resultsInfo = document.querySelector('#resultsInfo');
+const sort = document.querySelector('#sortSelect');
+const loadingElement = document.querySelector('.movies__loading');
 
 let moviesResults = [];
+
+
+function setLoading(isLoading) {
+  if (isLoading) {
+    loadingElement.classList.add('movies__loading--active');
+    grid.innerHTML = ''; // Clear existing movies during fetch
+  } else {
+    loadingElement.classList.remove('movies__loading--active');
+  }
+
+  if (sort) sort.disabled = isLoading;
+  if (input) input.disabled = isLoading;
+}
 
 
 async function searchMovies(searchTerm) {
@@ -16,17 +30,10 @@ async function searchMovies(searchTerm) {
 
     if (!term) return;
 
-    resultsInfo.innerHTML = `<span>Showing: </span>${term}`;
-
-    resultsInfo.innerHTML = `<span>Showing: </span>${term}`;
-    grid.innerHTML = `
-    <div class="movie-card movie-card--skeleton">
-      <div class="movie-card__img--skeleton"></div>
-      <div class="movie-card__title--skeleton"></div>
-      <div class="movie-card__year--skeleton"></div>
-    </div>
-  `.repeat(10);
-
+    if (resultsInfo) {
+        resultsInfo.innerHTML = `<span>Showing: </span>${term}`;
+    }
+    setLoading(true);
 
     try {
         const url = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(term)}`;
@@ -35,16 +42,19 @@ async function searchMovies(searchTerm) {
 
         if (data.Response === 'False') {
             movieResults = [];
-            grid.innerHTML = `<p>${data.Error}</p>`
+            grid.innerHTML = `<p>${data.Error}</p>`;
+            return;
         }
 
         movieResults = data.Search;
         displayMovies();
+        
     }
-
     catch(error){
         console.log(error);
         grid.innerHTML = '<p>Could not load movies. Please try again. </p>';
+    } finally {
+        setLoading(false);
     }
 }
 
@@ -62,7 +72,7 @@ function displayMovies() {
     else if (sort.value === 'newest') {
         moviesToDisplay.sort((a, b) => getYear(b.Year) - getYear(a.Year))
     }
-    else if (sort.value === 'older') {
+    else if (sort.value === 'oldest') {
         moviesToDisplay.sort((a, b) => getYear(a.Year) - getYear(b.Year))
     }
 
